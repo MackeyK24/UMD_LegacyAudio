@@ -3,6 +3,7 @@ import { Engine, Scene } from "babylonjs";
 
 export declare type BabylonjsProps = {
   antialias?: boolean;
+  legacyAudio?: boolean;
   engineOptions?: any;
   adaptToDeviceRatio?: boolean;
   renderChildrenWhenReady?: boolean;
@@ -17,7 +18,7 @@ export declare type BabylonjsProps = {
 };
 
 function Viewer(props: BabylonjsProps & React.CanvasHTMLAttributes<HTMLCanvasElement>) {
-    const { antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest } = props;
+    const { legacyAudio, antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest } = props;
     const reactCanvas = useRef(null);
     // set up basic engine and scene
     useEffect(() => {
@@ -25,7 +26,7 @@ function Viewer(props: BabylonjsProps & React.CanvasHTMLAttributes<HTMLCanvasEle
   
       if (!canvas) return;
   
-      const engine = new Engine(canvas, antialias, { audioEngine: true }, adaptToDeviceRatio);
+      const engine = new Engine(canvas, antialias, { audioEngine: legacyAudio }, adaptToDeviceRatio);
       const scene = new Scene(engine, sceneOptions);
       if (scene.isReady()) {
         onSceneReady(scene);
@@ -53,7 +54,7 @@ function Viewer(props: BabylonjsProps & React.CanvasHTMLAttributes<HTMLCanvasEle
           window.removeEventListener("resize", resize);
         }
       };
-    }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady]);
+    }, [legacyAudio, antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady]);
 
     return <canvas ref={reactCanvas} {...rest} />;
 }
