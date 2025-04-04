@@ -52,7 +52,7 @@ function App() {
           "https://raw.githubusercontent.com/onekit/gardener/master/public/sounds/loader/loading.ogg",
           scene,
           null,
-          { autoplay: true, loop:true, spatialSound: true, maxDistance: 25, rolloffFactor: 1 }
+          { autoplay: true, loop:true, spatialSound: true, maxDistance: 25, distanceModel:"linear", rolloffFactor: 1 }
       );
       window["sx"] = sx;
       sx.attachToMesh(sphere);
@@ -60,11 +60,12 @@ function App() {
     }
     else
     {
-      const audioEngine = await BABYLON.CreateAudioEngineAsync({ volume: 0.25 });
+      const audioEngine = await BABYLON.CreateAudioEngineAsync({ listenerAutoUpdate: true, listenerEnabled: true, resumeOnInteraction: true });
+      audioEngine.listener.attach(scene.activeCamera);
       await audioEngine.unlock();
       const sxx = await BABYLON.CreateSoundAsync("bounce",
         "https://raw.githubusercontent.com/onekit/gardener/master/public/sounds/loader/loading.ogg",
-        { spatialEnabled: true, spatialMaxDistance: 25, spatialRolloffFactor: 1 }
+        { spatialEnabled: true, spatialReferenceDistance: 0, spatialMaxDistance: 25, spatialDistanceModel: "linear", spatialRolloffFactor: 1 }
       );
       window["sxx"] = sxx;
       sxx.spatial.attach(sphere);
